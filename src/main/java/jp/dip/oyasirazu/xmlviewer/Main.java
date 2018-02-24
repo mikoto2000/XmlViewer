@@ -8,7 +8,9 @@ import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 
 class Main {
-    public static void main(String[] args) throws CmdLineException {
+    public static void main(String[] args) throws
+            CmdLineException,
+            XmlViewerException {
         // オプションオブジェクト準備
         CmdOptions options = new CmdOptions();
 
@@ -18,7 +20,7 @@ class Main {
         // パース
         optionParser.parseArgument(args);
 
-        System.out.println(options.getTargetFilePaths());
+        new XmlViewer(options.getTargetFilePaths().toArray(new String[0]));
     }
 
     /**
