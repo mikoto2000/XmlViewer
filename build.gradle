@@ -52,3 +52,13 @@ compileJava {
 run {
     args('./src/test/resources/test.xml')
 }
+
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'XML viewer.'
+        attributes 'Implementation-Version': 1.0
+        attributes "Main-Class" : mainClassName
+    }
+    from configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+}
+
