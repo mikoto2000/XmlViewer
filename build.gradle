@@ -43,6 +43,7 @@ compileJava {
     inputs.property("moduleName", moduleName)
     doFirst {
         options.compilerArgs = [
+            '--add-modules', 'java.xml',
             '--module-path', classpath.asPath,
         ]
         classpath = files()

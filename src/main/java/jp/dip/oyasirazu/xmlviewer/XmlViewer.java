@@ -22,6 +22,11 @@ import org.xml.sax.SAXException;
  * XmlViewer
  */
 public class XmlViewer {
+
+    private Document document;
+    private XmlView xmlView;
+    private ViewBuilder viewBuilder;
+
     /**
      * Constructor
      */
@@ -31,21 +36,71 @@ public class XmlViewer {
             DocumentBuilderFactory factory =
                     DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
-            Document document = builder.parse(Paths.get(xmlFiles[0]).toFile());
+            this.document = builder.parse(Paths.get(xmlFiles[0]).toFile());
 
-            StringWriter sw = new StringWriter();
-            TransformerFactory tfactory = TransformerFactory.newInstance();
-            Transformer transformer =
-                tfactory.newTransformer(new StreamSource(
-                    XmlViewer.class.getResourceAsStream("/style.xsl")));
-
-            transformer.transform(
-                    new DOMSource(document), new StreamResult(sw));
-
-            String xmlString = sw.toString().replaceAll("\r\n", "\n");
-            System.out.println(xmlString);
-        } catch (IOException|ParserConfigurationException|SAXException|TransformerException e) {
+            this.viewBuilder = new DefaultViewBuiler(this);
+        } catch (IOException|ParserConfigurationException|SAXException e) {
             throw new XmlViewerException(e);
         }
     }
+
+    public Document getDocument() {
+        return this.document;
+    }
+
+    public XmlView buildView() throws XmlViewBuildException {
+        return this.viewBuilder.build();
+    }
+
+    public interface ViewBuilder {
+        public XmlView build() throws XmlViewBuildException;
+    }
+
+    public interface XmlView {
+        public void show();
+    }
+
+    public class DefaultViewBuiler implements ViewBuilder {
+
+        private XmlViewer xmlViewer;
+
+        public DefaultViewBuiler(XmlViewer xmlViewer) {
+            this.xmlViewer = xmlViewer;
+        }
+
+        public XmlView build() throws XmlViewBuildException {
+            Document docment = xmlViewer.getDocument();
+            try {
+
+                StringWriter sw = new StringWriter();
+                TransformerFactory tfactory = TransformerFactory.newInstance();
+                Transformer transformer =
+                    tfactory.newTransformer(new StreamSource(
+                        XmlViewer.class.getResourceAsStream("/style.xsl")));
+
+                transformer.transform(
+                        new DOMSource(document), new StreamResult(sw));
+
+                String xmlString = sw.toString().replaceAll("\r\n", "\n");
+
+                return new DefaultXmlView(xmlString);
+            } catch (TransformerException e) {
+                throw new XmlViewBuildException(e);
+            }
+        }
+    }
+
+    public class DefaultXmlView implements XmlView {
+
+        private String xmlString;
+
+        public DefaultXmlView(String xmlString) {
+            this.xmlString = xmlString;
+        }
+
+        public void show() {
+            System.out.println(this.xmlString);
+        }
+    }
 }
+
