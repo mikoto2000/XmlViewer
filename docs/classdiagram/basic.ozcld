@@ -1,0 +1,71 @@
+classdiagram basic {
+    class Main {
+        ==
+        ==
+    }
+
+    class XmlViewer {
+        ==
+        "- document : Document";
+        "- viewBuilder : ViewBulder";
+        ==
+        "+ XmlView(xmlFiles : String...)";
+        "+ getDocument() : Document";
+        "+ getViewBuilder() : void";
+        "+ setViewBuilder(viewBuilder : ViewBuilder) : void";
+        "+ buildView() : XmlView";
+    }
+
+    class XmlView {
+        stereotype: interface;
+        ==
+        ==
+        "+ show() : void";
+    }
+
+    class ViewBuilder {
+        stereotype: interface;
+        ==
+        ==
+        "+ build() : XmlView";
+    }
+
+    class DefaultXmlView {
+        ==
+        ==
+        "+ show() : void";
+    }
+
+    class DefaultViewBuilder {
+        ==
+        ==
+        "+ build() : XmlView";
+    }
+
+    class JfxXmlView {
+        ==
+        "- xmlViewer : XmlViewer";
+        ==
+        "+ show() : void";
+    }
+
+    class JfxViewBuilder {
+        ==
+        ==
+        "+ build() : XmlView";
+    }
+
+    Main -> XmlViewer;
+    Main -> JfxViewBuilder;
+    JfxViewBuilder -> JfxXmlView;
+    XmlViewer -> DefaultViewBuilder;
+    DefaultViewBuilder -> DefaultXmlView;
+
+    DefaultViewBuilder .|> ViewBuilder;
+    DefaultXmlView .|> XmlView;
+
+    JfxViewBuilder .|> ViewBuilder;
+    JfxXmlView .|> XmlView;
+    //JfxXmlView -> XmlViewer;
+}
+
