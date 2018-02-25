@@ -24,7 +24,6 @@ import org.xml.sax.SAXException;
 public class XmlViewer {
 
     private Document document;
-    private XmlView xmlView;
     private ViewBuilder viewBuilder;
 
     /**
