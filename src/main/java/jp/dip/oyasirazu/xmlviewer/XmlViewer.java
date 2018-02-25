@@ -47,6 +47,10 @@ public class XmlViewer {
         return this.document;
     }
 
+    public void setViewBuilder(ViewBuilder viewBuilder) {
+        this.viewBuilder = viewBuilder;
+    }
+
     public XmlView buildView() throws XmlViewBuildException {
         return this.viewBuilder.build();
     }
