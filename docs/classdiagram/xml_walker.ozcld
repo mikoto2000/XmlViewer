@@ -1,15 +1,24 @@
 classdiagram tree_walker {
-    class TreeWalker {
+    class "TreeWalker\<S, D\>" {
+        id: TreeWalker;
         ==
+        "- getInstanceChildren(parentNode : S) : List\<S\>";
         ==
-        "+ walk(node : Node, visitor : NodeVisitor) : NodeVisitResult";
+        "+ TreeWalker(nodeVsitor : NodeVisitor\<S, D\>)";
+        "+ walk(currentNode : S, visitor : NodeVisitor\<S, D\>) : NodeVisitResult";
+        "+ setInstanceChildrenGetProcess(getChildrenProcess : Function\<S, List\<S\>\>) : void";
     }
 
-    class NodeVisitor {
-       stereotype: interface;
+    class "NodeVisitor\<S, D\>" {
+        stereotype: interface;
+        id: NodeVisitor;
         ==
+        "- generateDestInstance(sourceNode : S) : D";
+        "- addDestInstanceChild(parentNode : D, currentNode : D) : void";
         ==
-        "+ visitNode(node : Node) : NodeVisitResult";
+        "+ visitNode(currentSourceNode : S) : NodeVisitResult";
+        "+ setDestInstanceGenerateProcess(generatedProcess : Function\<S, D\>) : void";
+        "+ setDestInstanceAddChildProcess(addChildProcess : BiConsumer\<D, D\>) : void";
     }
 
     class NodeVisitResult {
