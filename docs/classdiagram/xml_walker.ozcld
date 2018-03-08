@@ -1,0 +1,28 @@
+classdiagram tree_walker {
+    class TreeWalker {
+        ==
+        ==
+        "+ walk(node : Node, visitor : NodeVisitor) : NodeVisitResult";
+    }
+
+    class NodeVisitor {
+       stereotype: interface;
+        ==
+        ==
+        "+ visitNode(node : Node) : NodeVisitResult";
+    }
+
+    class NodeVisitResult {
+        stereotype: enum;
+        ==
+        "+ CONTINUE";
+        "+ TERMINATE";
+        "+ SKIP_SUBTREE";
+        "+ SKIP_SIBLINGS";
+        ==
+    }
+
+    TreeWalker -> NodeVisitor;
+    TreeWalker -> NodeVisitResult;
+    NodeVisitor -> NodeVisitResult;
+}
